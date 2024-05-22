@@ -34,8 +34,8 @@
                     <td>${list[i].price}</td>
                     <td>${list[i].quantity}</td>
                     <td>${list[i].image}</td>
-                    <td><button>Sua</button></td>
-                    <td><button>Xoa</button></td>
+                    <td><button>Edit</button></td>
+                    <td><button onclick="remove(${list[i].id})">Delete</button></td>
                 </tr>`
             }
             html += `</table>`;
@@ -45,7 +45,54 @@
     }
 
     function showFormAdd() {
-        document.getElementById("root").innerHTML = "<h1>Day la Add Page</h1>"
+        axios.get("http://localhost:8080/categories").then((response) => {
+            let category = response.data;
+            let html = `<select id="category">`;
+            for (let i = 0; i < category.length; i++) {
+                    html += `<option value="${category[i].id}">${category[i].name}</option>`
+            }
+            html += `</select>`;
+        document.getElementById("root").innerHTML = `
+        <input type="text" id="name" placeholder="Name">
+        <input type="number" id="price" placeholder="Price">
+        <input type="number" id="quantity" placeholder="Quantity">
+        <input type="text" id="image" placeholder="Image">
+        ${html}
+        <button onclick="add()">Submit</button>
+        `
+        });
+    }
+
+    function add() {
+
+            let name = document.getElementById("name").value;
+            let price = document.getElementById("price").value;
+            let quantity = document.getElementById("quantity").value;
+            let image = document.getElementById("image").value;
+            let idCategory = document.getElementById("category").value;
+
+        let newProduct =  {
+            "name": name,
+            "price": price,
+            "quantity": quantity,
+            "image": image,
+            "category": {
+                id: idCategory
+            }
+        }
+        axios.post("http://localhost:8080/products", newProduct).then (() => {
+            showHome();
+        })
+
+    }
+
+    function remove(id) {
+        let isConfirm = confirm("Are you sure?");
+        if (isConfirm) {
+            axios.delete(`http://localhost:8080/products/${id}`).then(() => {
+                showHome();
+            })
+        }
     }
 </script>
 </body>
