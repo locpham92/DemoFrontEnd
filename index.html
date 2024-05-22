@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOME</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<button onclick="showHome()">Home</button> | <button onclick="showFormAdd()">Add</button>
+<div id="root">
+
+</div>
+<script>
+    showHome();
+    function showHome() {
+        axios.get("http://localhost:8080/products").then((response) => {
+            let list = response.data;
+            let html = `
+              <table border="1">
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Image</td>
+                    <td colSpan="2">Action</td>
+                </tr>
+            `;
+            for (let i =0;i < list.length;i++) {
+                html += `
+                <tr>
+                    <td>${list[i].id}</td>
+                    <td>${list[i].name}</td>
+                    <td>${list[i].price}</td>
+                    <td>${list[i].quantity}</td>
+                    <td>${list[i].image}</td>
+                    <td><button>Sua</button></td>
+                    <td><button>Xoa</button></td>
+                </tr>`
+            }
+            html += `</table>`;
+            document.getElementById("root").innerHTML = html;
+
+        })
+    }
+
+    function showFormAdd() {
+        document.getElementById("root").innerHTML = "<h1>Day la Add Page</h1>"
+    }
+</script>
+</body>
+</html>
