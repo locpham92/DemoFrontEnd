@@ -34,6 +34,12 @@
                     <td>${list[i].price}</td>
                     <td>${list[i].quantity}</td>
                     <td>${list[i].image}</td>
+                    <td>`
+                for (let j = 0; j < list[i].brands.length; j++) {
+                    html += `${lít[i].brands[j].name},`
+                }
+
+                    html += `</td>
                     <td><button>Edit</button></td>
                     <td><button onclick="remove(${list[i].id})">Delete</button></td>
                 </tr>`
